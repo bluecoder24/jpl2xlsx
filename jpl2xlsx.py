@@ -44,6 +44,7 @@ def dc():
         target (String)     Path & file name of the .xlsx which is created, default = execution directory, file name = export.xlsx
     
     """ 
+    return "Error"
 
 print("--- jpl2xlsx ---\n\nConsole application to migrate .jpl files (d.capture batch) to .xlsx\nVersion: 1.0\nAuthor: Jonathan Haist <jonathan.haist@t-online.de>")
 print("\n- Commands -\n")
