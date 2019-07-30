@@ -3,7 +3,8 @@
     Author: Jonathan Haist <jonathan.haist@t-online.de>
 
 """
-import xlrd
+import openpyxl
+from openpyxl import Workbook
 import os
 exit = 0
 
@@ -27,28 +28,58 @@ def jpl2xlsx(source=os.getcwd(), target="export.xlsx"):
             msg (String)        Error or hopefully success message 
     
     """ 
+    
+
+    #for row in ws.iter_rows(min_row=1, max_col=200, max_row=9999):
+        #for cell in row:
+            #print(cell)
+
+    
+
     files = list(dirsearch(source))  
-
-    print(files)
-
     line_counter = 0
+    data = []
+    header_written = False
+    #wb = Workbook()
+    #ws = wb.active
+    #ws.title = "Data"
 
     for file in files:
         with open(file) as infile:
-            for line in infile:
+            basename = os.path.basename(file).split(".")
+            data_set = []
+            
+            if header_written == False:
+                data_set.append("ID")
+                for line in infile:
+                    line_counter += 1
+                    if line_counter >= 9:
+                        content = line[:-1].split("=")
+                        title = content[0].strip()
+                        data_set.append(title)
+                header_written = True
+                line_counter = 0
+            
+            for line2 in infile:
                 line_counter += 1
                 if line_counter >= 9:
-                    print(line)
-                elif line_counter == 1: 
-                    basename = os.path.basename(file).split(".")
-                    print(basename[0] + "\n")
-                
-            print("----------")
+                    content = line2[:-1].split("=")
+                    content2 = content[1].split("\"")
+                    value = content2[1]
+                    data_set.append(value)
+                elif line_counter == 1:
+                    data_set.append(basename[0])
+            line_counter = 0    
+            #print("----------")
+            data.append(data_set)
+
+    print(data)
+    #wb.save(target)
 
 print("--- jpl2xlsx ---\n\nConsole application to migrate .jpl files (d.capture batch) to .xlsx\nVersion: 1.0\nAuthor: Jonathan Haist <jonathan.haist@t-online.de>")
 print("\n- Commands -\n")
-print("go\tRun the migration in the execution directory")
-print("goc\tRun the migration in a custom directory")
+print("go\tRun the migration and export in the execution directory")
+print("goc\tRun the migration and export in a custom directory")
 print("ex\tExit the program\n")
 
 while exit == 0:
