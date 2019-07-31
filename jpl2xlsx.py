@@ -9,14 +9,14 @@ import os
 exit = 0
 
 def export(target, data):
-    """Exports the data to an .xlsx-file
+    """Exports the data to an Excel-file
 
         Args:
-            target (String)     File name of the .xlsx to create
+            target (String)     File name or path of the Excel to create
             data (list)         List containing the data to export    
 
         Returns:
-            none
+            None
 
     """
     
@@ -48,9 +48,13 @@ def export(target, data):
     print("Saved to " + target)
 
 def dirsearch(path):
-    """ 
-       Looks for all .jpl files in the path directory
+    """Looks for all .jpl files in the path directory
+
+        Args:
+            path (String)   Path of the directory
+
     """
+    
     for root, dirs, filenames in os.walk(path):
         for filename in filenames:
             if os.path.splitext(filename)[-1] == ".jpl":
@@ -64,7 +68,7 @@ def jpl2xlsx(source=os.getcwd(), target="export.xlsx"):
             target (String)     Path & file name of the .xlsx which is created, default = execution directory, file name = export.xlsx
 
         Returns:
-            msg (String)        Error or hopefully success message 
+            None
     
     """ 
 
@@ -103,9 +107,7 @@ def jpl2xlsx(source=os.getcwd(), target="export.xlsx"):
             #print("----------")
             data.append(data_set)
 
-    print(data)
     export(target, data)
-
 
 print("--- jpl2xlsx ---\n\nConsole application to migrate .jpl files (d.capture batch) to .xlsx\nVersion: 1.0\nAuthor: Jonathan Haist <jonathan.haist@t-online.de>")
 print("\n- Commands -\n")
