@@ -8,6 +8,45 @@ from openpyxl import Workbook
 import os
 exit = 0
 
+def export(target, data):
+    """Exports the data to an .xlsx-file
+
+        Args:
+            target (String)     File name of the .xlsx to create
+            data (list)         List containing the data to export    
+
+        Returns:
+            none
+
+    """
+    
+    print("Writing worksheet...")
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Data"
+
+    #for data_set in data:
+    set_id = 0
+    value_id = 0
+    for row in ws.iter_rows(min_row=1, max_col=200, max_row=1000):
+        if((len(data)-1) < set_id):
+            continue
+        else:
+            data_set = data[set_id]
+            set_id += 1
+            for cell in row:
+                if((len(data_set)-1) < value_id):
+                    continue
+                else:   
+                    value = data_set[value_id]
+                    value_id += 1
+                    cell.value = value
+            value_id = 0
+
+    print("Saving...")
+    wb.save(target)
+    print("Saved to " + target)
+
 def dirsearch(path):
     """ 
        Looks for all .jpl files in the path directory
@@ -28,20 +67,10 @@ def jpl2xlsx(source=os.getcwd(), target="export.xlsx"):
             msg (String)        Error or hopefully success message 
     
     """ 
-    
-
-    #for row in ws.iter_rows(min_row=1, max_col=200, max_row=9999):
-        #for cell in row:
-            #print(cell)
-
-    
 
     files = list(dirsearch(source))  
     line_counter = 0
     data = []
-    #wb = Workbook()
-    #ws = wb.active
-    #ws.title = "Data"
 
     #Reading out the titles and writing them into the data as first data_set
     with open(files[0]) as infile_header:
@@ -75,12 +104,13 @@ def jpl2xlsx(source=os.getcwd(), target="export.xlsx"):
             data.append(data_set)
 
     print(data)
-    #wb.save(target)
+    export(target, data)
+
 
 print("--- jpl2xlsx ---\n\nConsole application to migrate .jpl files (d.capture batch) to .xlsx\nVersion: 1.0\nAuthor: Jonathan Haist <jonathan.haist@t-online.de>")
 print("\n- Commands -\n")
-print("go\tRun the migration and export in the execution directory")
-print("goc\tRun the migration and export in a custom directory")
+print("go\tRead the .jpl-files from the execution directory and save the excel file there.")
+print("goc\tRead the .jpl-files from a custom directory and save the excel file there.")
 print("ex\tExit the program\n")
 
 while exit == 0:
@@ -89,8 +119,7 @@ while exit == 0:
         jpl2xlsx()
     elif cmd == "goc":
         u_source = input("Enter the source directory: ")
-        u_target = input("Enter the target directory: ")
-        jpl2xlsx(u_source, u_target)
+        jpl2xlsx(u_source)
     elif cmd == "ex":
         exit = 1
     else:
