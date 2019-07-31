@@ -39,27 +39,28 @@ def jpl2xlsx(source=os.getcwd(), target="export.xlsx"):
     files = list(dirsearch(source))  
     line_counter = 0
     data = []
-    header_written = False
     #wb = Workbook()
     #ws = wb.active
     #ws.title = "Data"
 
+    #Reading out the titles and writing them into the data as first data_set
+    with open(files[0]) as infile_header:
+        data_set = []
+        data_set.append("ID")
+        for line in infile_header:
+            line_counter += 1
+            if line_counter >= 9:
+                content = line[:-1].split("=")
+                title = content[0].strip()
+                data_set.append(title)
+        line_counter = 0
+        data.append(data_set)
+    
+    #Reading out the values and writing them into the data as data_set
     for file in files:
         with open(file) as infile:
             basename = os.path.basename(file).split(".")
             data_set = []
-            
-            if header_written == False:
-                data_set.append("ID")
-                for line in infile:
-                    line_counter += 1
-                    if line_counter >= 9:
-                        content = line[:-1].split("=")
-                        title = content[0].strip()
-                        data_set.append(title)
-                header_written = True
-                line_counter = 0
-            
             for line2 in infile:
                 line_counter += 1
                 if line_counter >= 9:
