@@ -88,6 +88,9 @@ def jpl2xlsx(source=os.getcwd(), target="export.xlsx"):
                 data_set.append(title)
         line_counter = 0
         data.append(data_set)
+        #writing titles 2.0
+    #ata_set = ['ID', 'Components', 'Office Furniture', 'Vehicle Construction', 'Floor', 'Wooden House Building', 'Kitchen/Bathroom', 'Shop-/Interior Design', 'Non Wood', 'Home Furniture', 'Others', 'Employees']
+    #ata.append(data_set)
     
     #Reading out the values and writing them into the data as data_set
     for file in files:
