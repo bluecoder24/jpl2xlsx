@@ -25,7 +25,6 @@ def export(target, data):
     ws = wb.active
     ws.title = "Data"
 
-    #for data_set in data:
     set_id = 0
     value_id = 0
     for row in ws.iter_rows(min_row=1, max_col=200, max_row=1000):
@@ -104,7 +103,6 @@ def jpl2xlsx(source=os.getcwd(), target="export.xlsx"):
                 elif line_counter == 1:
                     data_set.append(basename[0])
             line_counter = 0    
-            #print("----------")
             data.append(data_set)
 
     export(target, data)
